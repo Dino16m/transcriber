@@ -24,17 +24,56 @@ Future<String> getAssetFileAbsolutePath(String assetPath) async {
   return file.path;
 }
 
-Future<FlutterWhisperKit> initWhisper() async {
+Future<FlutterWhisperKit> reloadWhisper(
+  FlutterWhisperKit whisper,
+  String? model,
+) async {
+  try {
+    // Load a model
+    logger.d("ReLoading model");
+    await whisper.loadModel(
+      model ??
+          "base", // Model size: tiny, base, small, medium, large-v2, large-v3
+      onProgress: (progress) {
+        logger.i(
+          "Loading model ${(progress.fractionCompleted * 100).toStringAsFixed(1)}%",
+        );
+      },
+    );
+    logger.d("Model reloaded");
+  } on WhisperKitError catch (e) {
+    logger.i("Failed to load model ${e.message} ${e.toString()}");
+    throw ApplicationError("Failed to reload model");
+  }
+
+  try {
+    await whisper.prewarmModels();
+  } on WhisperKitError catch (e) {
+    logger.i("Failed to prewarm model ${e.message}");
+    throw ApplicationError("Failed to prewarm model");
+  }
+
+  return whisper;
+}
+
+Future<FlutterWhisperKit> initWhisper(
+  String? model, {
+  void Function(double)? onProgress,
+}) async {
   final whisperKit = FlutterWhisperKit();
   try {
     // Load a model
     logger.d("Loading model");
     await whisperKit.loadModel(
-      'small', // Model size: tiny, base, small, medium, large-v2, large-v3
+      model ??
+          "base", // Model size: tiny, base, small, medium, large-v2, large-v3
       onProgress: (progress) {
         logger.i(
           "Loading model ${(progress.fractionCompleted * 100).toStringAsFixed(1)}%",
         );
+        if (onProgress != null) {
+          onProgress(progress.fractionCompleted);
+        }
       },
     );
     logger.d("Model loaded");
@@ -47,7 +86,7 @@ Future<FlutterWhisperKit> initWhisper() async {
     await whisperKit.prewarmModels();
   } on WhisperKitError catch (e) {
     logger.i("Failed to prewarm model ${e.message}");
-    throw ApplicationError("Failed to download model");
+    throw ApplicationError("Failed to prewarm model");
   }
 
   return whisperKit;

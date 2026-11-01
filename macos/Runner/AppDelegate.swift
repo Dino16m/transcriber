@@ -1,6 +1,8 @@
 import Cocoa
 import FlutterMacOS
 import ServiceManagement
+import Foundation
+import ApplicationServices
 
 
 @main
@@ -72,6 +74,11 @@ class AppDelegate: FlutterAppDelegate {
   private func simulateTyping(text: String) {
     print("Simulating")
     let source = CGEventSource(stateID: .combinedSessionState)
+
+    guard AXIsProcessTrusted() else {
+        print("Failed: Accessibility permission is denied.")
+        return
+    }
 
     for character in text {
       print("Printing character \(character)")

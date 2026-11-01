@@ -40,6 +40,6 @@ class DictationPipeline implements DictationController {
       return;
     }
     logger.d("Transcribed Text \n $transcribedText");
-    _textInjector.pasteText(transcribedText);
+    _textInjector.typeText(transcribedText);
   }
 }

@@ -1,6 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
+import 'package:transcriber/pages/dashboard/screens/about_screen.dart';
+import 'package:transcriber/pages/dashboard/screens/dictionary_screen.dart';
+import 'package:transcriber/pages/dashboard/screens/formatting_screen.dart';
+import 'package:transcriber/pages/dashboard/screens/general_screen.dart';
+import 'package:transcriber/pages/dashboard/screens/history_screen.dart';
+import 'package:transcriber/pages/dashboard/screens/models_screen.dart';
+import 'package:transcriber/pages/dashboard/screens/statistics_screen.dart';
 
 class _SidebarItemWrapper {
   final UniqueKey id;
@@ -44,6 +51,16 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int pageIndex = 0;
+
+  final List<Widget> screens = const [
+    GeneralScreen(),
+    ModelsScreen(),
+    FormattingScreen(),
+    DictionaryScreen(),
+    HistoryScreen(),
+    StatisticsScreen(),
+    AboutScreen(),
+  ];
 
   List<_SidebarItemWrapper> items = [
     _SidebarItemWrapper(
@@ -135,6 +152,14 @@ class _DashboardState extends State<Dashboard> {
             ),
           );
         },
+      ),
+      child: MacosScaffold(
+        backgroundColor: Color(0xFFF7F7F9),
+        children: [
+          ContentArea(
+            builder: (context, scrollController) => screens[pageIndex],
+          ),
+        ],
       ),
     );
   }

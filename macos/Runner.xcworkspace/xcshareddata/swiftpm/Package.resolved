@@ -1,4 +1,5 @@
 {
+  "originHash" : "e264135a6ee63dbdee960e73f03e22ecb86c925b180271dc1997404d9e6437ab",
   "pins" : [
     {
       "identity" : "swift-argument-parser",
@@ -41,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/huggingface/swift-jinja.git",
       "state" : {
-        "revision" : "1151a145acc2ebc0f05d53fce2c6245c0c84e9dc",
-        "version" : "2.4.3"
+        "revision" : "12ea4955e380dae6b0cd98299effe48c7fe584fc",
+        "version" : "2.5.0"
       }
     },
     {
@@ -73,5 +74,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
